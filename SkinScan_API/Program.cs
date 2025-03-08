@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SkinScan_BL.Contracts;
 using SkinScan_BL.Repositories;
 using SkinScan_Core.Contexts;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,11 @@ builder.Services.AddCors(option =>
     });
 
 });
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c => {
@@ -97,11 +103,12 @@ builder.Services.AddSwaggerGen(c => {
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseCors("MyPolicy");
 app.UseAuthentication();

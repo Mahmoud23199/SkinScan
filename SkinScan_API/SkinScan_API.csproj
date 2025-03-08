@@ -24,4 +24,10 @@
     <ProjectReference Include="..\SkinDiseases_Core\SkinScan_Core.csproj" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>1591</NoWarn>
+	</PropertyGroup>
+
+
 </Project>

@@ -114,7 +114,9 @@ namespace SkinScan_API.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.UserType.ToString()),
+
             };
 
             var roles = await _userManager.GetRolesAsync(user);
