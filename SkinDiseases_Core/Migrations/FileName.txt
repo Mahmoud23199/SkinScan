@@ -1,0 +1,52 @@
+dotnet ef migrations add InitialCreatev2 --startup-project ../SkinScan_API
+dotnet ef database update --startup-project ../SkinScan_API
+
+
+
+SET IDENTITY_INSERT ChatbotQuestion ON;
+
+INSERT INTO ChatbotQuestion (Id, QuestionText, AnswerText, ParentId, NextQuestionId, BotResponse) VALUES
+(40, 'What is your main skin concern?', NULL, NULL, NULL, NULL),
+(41, NULL, 'Acne', 40, 44, NULL),
+(42, NULL, 'Eczema', 40, 45, NULL),
+(43, NULL, 'Psoriasis', 40, 46, NULL),
+(44, 'What type of acne do you have?', NULL, 44, NULL, NULL),
+(45, 'What triggers your eczema flare-ups?', NULL, 45, NULL, NULL),
+(46, 'Which area is affected by psoriasis?', NULL, 46, NULL, NULL),
+(47, NULL, 'Blackheads & Whiteheads', 44, NULL, 'For mild acne, consider using a gentle cleanser and salicylic acid-based products.'),
+(48, NULL, 'Pimples & Inflammation', 44, NULL, 'For inflamed acne, benzoyl peroxide or prescription treatments may help.'),
+(49, NULL, 'Severe Cystic Acne', 44, NULL, 'For severe acne, consult a dermatologist for medical treatments.'),
+(50, NULL, 'Dry Skin', 45, NULL, 'Moisturizing regularly can help manage dry skin eczema.'),
+(51, NULL, 'Allergens', 45, NULL, 'Avoid allergens like pollen, pet dander, and certain foods.'),
+(52, NULL, 'Stress', 45, NULL, 'Try stress management techniques like meditation and deep breathing.'),
+(53, NULL, 'Scalp', 46, NULL, 'Scalp psoriasis can be managed with medicated shampoos.'),
+(54, NULL, 'Hands & Feet', 46, NULL, 'Hand and foot psoriasis may require topical steroids or light therapy.'),
+(55, NULL, 'Whole Body', 46, NULL, 'Severe psoriasis should be treated with a dermatologist-recommended plan.'),
+(56, NULL, 'Rosacea', 40, 57, NULL),
+(57, 'What is your main rosacea symptom?', NULL, 56, NULL, NULL),
+(58, NULL, 'Facial Redness', 57, NULL, 'Use gentle skincare and avoid triggers like alcohol and spicy food.'),
+(59, NULL, 'Pimples & Bumps', 57, NULL, 'Prescription treatments may help with rosacea-related pimples.'),
+(60, NULL, 'Veins & Swelling', 57, NULL, 'Vein treatments and laser therapy may be effective for swelling and redness.'),
+(61, NULL, 'Other', 40, 62, NULL),
+(62, 'What type of skin issue are you experiencing?', NULL, 62, NULL, NULL),
+(63, NULL, 'Rashes', 62, NULL, 'Rashes can be caused by allergies, infections, or skin conditions. Consult a doctor if severe.'),
+(64, NULL, 'Skin Discoloration', 62, NULL, 'Skin discoloration may be due to hyperpigmentation, sun damage, or medical conditions.'),
+(65, NULL, 'Dry/Peeling Skin', 62, NULL, 'Moisturizing regularly can help with dry/peeling skin. Consider hydrating skincare products.'),
+(66, NULL, 'Itching & Irritation', 62, NULL, 'Itching may be due to dry skin, eczema, or fungal infections. Identify and avoid triggers.'),
+(67, NULL, 'Other (Not Listed)', 62, NULL, 'For unlisted concerns, please describe your issue in detail to a dermatologist.');
+
+SET IDENTITY_INSERT ChatbotQuestion OFF;
+
+
+
+
+
+
+
+
+INSERT INTO Diseases (Id, Name, Description, Causes, Treatments, MoreInfoUrl)  
+VALUES  
+(1, 'Eczema', 'Itchy, red, dry skin', 'Genetics, allergens, stress', 'Moisturizers, steroids, antihistamines', 'https://www.webmd.com/skin-problems-and-treatments/eczema'),  
+(2, 'Psoriasis', 'Scaly, inflamed patches of skin', 'Immune system dysfunction', 'Topical creams, UV therapy, biologics', 'https://www.mayoclinic.org/diseases-conditions/psoriasis'),  
+(3, 'Acne', 'Pimples, blackheads, whiteheads', 'Hormones, bacteria, oil production', 'Topical treatments, antibiotics, retinoids', 'https://www.aad.org/public/diseases/acne'),  
+(4, 'Rosacea', 'Facial redness, visible blood vessels', 'Unknown, possibly genetics or environment', 'Laser therapy, antibiotics, lifestyle changes', 'https://www.nhs.uk/conditions/rosacea');  

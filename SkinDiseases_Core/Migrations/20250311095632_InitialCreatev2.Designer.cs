@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkinScan_Core.Contexts;
 
@@ -11,9 +12,11 @@ using SkinScan_Core.Contexts;
 namespace SkinScan_Core.Migrations
 {
     [DbContext(typeof(SkinDbAppContext))]
-    partial class SkinDbAppContextModelSnapshot : ModelSnapshot
+    [Migration("20250311095632_InitialCreatev2")]
+    partial class InitialCreatev2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
