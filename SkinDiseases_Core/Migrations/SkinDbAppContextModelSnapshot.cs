@@ -229,67 +229,6 @@ namespace SkinScan_Core.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SkinScan_Core.Entites.ChatbotQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BotResponse")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NextQuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NextQuestionId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ChatbotQuestion");
-                });
-
-            modelBuilder.Entity("SkinScan_Core.Entites.Disease", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Causes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("References1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Symptoms")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Treatments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Diseases");
-                });
-
             modelBuilder.Entity("SkinScan_Core.Entites.Doctor", b =>
                 {
                     b.Property<int>("Id")
@@ -452,23 +391,6 @@ namespace SkinScan_Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SkinScan_Core.Entites.ChatbotQuestion", b =>
-                {
-                    b.HasOne("SkinScan_Core.Entites.ChatbotQuestion", "NextQuestion")
-                        .WithMany("InverseNextQuestion")
-                        .HasForeignKey("NextQuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SkinScan_Core.Entites.ChatbotQuestion", "Parent")
-                        .WithMany("InverseParent")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("NextQuestion");
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("SkinScan_Core.Entites.Doctor", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
@@ -504,13 +426,6 @@ namespace SkinScan_Core.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SkinScan_Core.Entites.ChatbotQuestion", b =>
-                {
-                    b.Navigation("InverseNextQuestion");
-
-                    b.Navigation("InverseParent");
                 });
 
             modelBuilder.Entity("SkinScan_Core.Contexts.ApplicationUser", b =>
