@@ -19,6 +19,25 @@ namespace SkinScan_Core.Contexts
         public DbSet<Patient> Patients { get; set; }
         public DbSet<PationDiagnosis> PationDiagnosis { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Disease> Diseases { get; set; }
+        public DbSet<ChatbotQuestion> ChatbotQuestion { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            
+            modelBuilder.Entity<ChatbotQuestion>()
+                .HasOne(q => q.NextQuestion)
+                .WithMany(q => q.InverseNextQuestion)
+                .HasForeignKey(q => q.NextQuestionId)
+                .OnDelete(DeleteBehavior.Restrict);  
+
+             
+            modelBuilder.Entity<ChatbotQuestion>()
+                .HasOne(q => q.Parent)
+                .WithMany(q => q.InverseParent)
+                .HasForeignKey(q => q.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);  
+        }
     }
 }
