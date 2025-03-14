@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkinScan_API.Common;
+using SkinScan_API.Dtos;
 using SkinScan_BL.Contracts;
 using SkinScan_Core.Contexts;
 using SkinScan_Core.Entites;
+using SkinScan_Services;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace SkinScan_API.Controllers
 {
@@ -18,13 +21,17 @@ namespace SkinScan_API.Controllers
         private readonly IGenericRepository<Patient> _pationRepository;
         private readonly IGenericRepository<PationDiagnosis> _PationDiagnosis;
         private readonly UserManager<ApplicationUser> _userManager;
-        public PatientController(UserManager<ApplicationUser> userManager, IGenericRepository<PationDiagnosis> PationDiagnosis,IHttpContextAccessor httpContextAccessor, ISaveFileService saveFileService, IGenericRepository<Patient> pationRepository)
+        private readonly IConfiguration _configuration;
+        private readonly SkinModel _skinModel;
+        public PatientController(UserManager<ApplicationUser> userManager, SkinModel skinModel, IConfiguration configuration, IGenericRepository<PationDiagnosis> PationDiagnosis,IHttpContextAccessor httpContextAccessor, ISaveFileService saveFileService, IGenericRepository<Patient> pationRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _saveFileService = saveFileService;
             _pationRepository = pationRepository;
             _userManager = userManager;
             _PationDiagnosis = PationDiagnosis;
+            _configuration = configuration;
+            _skinModel = skinModel;
         }
 
 
@@ -60,25 +67,38 @@ namespace SkinScan_API.Controllers
             {
                 var relativePath = await _saveFileService.SaveFileAsync(image);
                 var fileUrl = $"{Request.Scheme}://{Request.Host}/{relativePath}";
-
+                var url = _configuration["SkinModel:ApiUrl"];
                 //--------------------------
-                 //MODEL CODE INTEGRATION
+                //MODEL CODE INTEGRATION
+                var filePath = Path.GetTempFileName();
+
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                string result = await _skinModel.PredictAsync(url, filePath);
+                PredictionResult prediction = JsonSerializer.Deserialize<PredictionResult>(
+                     result,
+                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                 );
+
                 //-------------------------
                 var newDiagnosis = new PationDiagnosis
                 {
                     UserId = user.Id,
                     ImagePath = relativePath,
-                   // Diagnosis = diagnosis,
-                   // Details = details
+                    Diagnosis = prediction?.Disease ?? "Unknown",
+                    Details = fileUrl+"#"+ prediction?.Confidence
                 };
-
+                
                 await _PationDiagnosis.AddedAsync(newDiagnosis);
 
                 return Ok(new ResponseModel<object>(
                     StatusCodes.Status200OK,
                     true,
                     "Image uploaded successfully",
-                    new { UserId = user.Id, ImageUrl = fileUrl }
+                    new { UserId = user.Id, ImageUrl = fileUrl, DiagnosisName = prediction?.Disease ?? "Unknown", Confidence= prediction?.Confidence }
                 ));
             }
             catch (Exception ex)

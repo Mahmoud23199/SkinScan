@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SkinScan_BL.Contracts;
 using SkinScan_BL.Repositories;
 using SkinScan_Core.Contexts;
+using SkinScan_Services;
 using System.Reflection;
 using System.Text;
 
@@ -25,6 +26,8 @@ builder.Services.AddDbContext<SkinDbAppContext>(option =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ISaveFileService, SaveFileService>();
+builder.Services.AddHttpClient<SkinModel>();
+
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()

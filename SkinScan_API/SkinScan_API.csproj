@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SkinDiseases_BL\SkinScan_BL.csproj" />
     <ProjectReference Include="..\SkinDiseases_Core\SkinScan_Core.csproj" />
+    <ProjectReference Include="..\SkinScan_Services\SkinScan_Services.csproj" />
   </ItemGroup>
 
 	<PropertyGroup>
